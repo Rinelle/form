@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <form class="form">
+        <fieldset>
+            <legend>Персональные данные</legend>
+            <div class="form-field">
+                <label>
+                    <div class="label-text">Имя</div>
+                    <input type="text" name="firstName">
+                </label>
+                <label>
+                    <div class="label-text">Фамилия</div>
+                    <input type="text" name="lastName">
+                </label>
+                <label>
+                    <div class="label-text">Отчество</div>
+                    <input type="text" name="surname">
+                </label>
+                <div>
+                    <div class="label-text">Пол</div>
+                    <label>
+                        <input type="radio" name="sex" value="female" checked><span>Женский</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="sex" value="male"><span>Мужской</span>
+                    </label>
+                </label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Домашнее животное</legend>
+            <label>               
+                <input id="pet-info-block-switcher" type="checkbox"> <span>Есть домашнее животное</span>
+            </label>
+            <div class="pet-info"></div>
+        </fieldset>
+        <button class="button-submit" type="submit">Отправить</button>
+        <div class="errors-list">
+            <ul></ul>
+        </div>
+    </form>
+    
+
+    <button id="outside-button">Отправить</button>
+    <div id="sendedData"></div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
