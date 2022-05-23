@@ -1,5 +1,5 @@
 const form = document.querySelector('.form'),
-    sumbitButton = document.querySelector('#outside-button'),
+    submitButton = document.querySelector('#outside-button'),
     errorsList = document.querySelector('.errors-list ul'),
     petInfoBlockSwitcher = document.querySelector('#pet-info-block-switcher'),
     errors = [],
@@ -18,7 +18,7 @@ form.addEventListener('submit', submitFormHandler);
 
 
 /** Событие нажатия на кнопку снаружи формы для отправки формы */
-sumbitButton.addEventListener('click', submitFormHandler);
+submitButton.addEventListener('click', submitFormHandler);
 
 
 /** Пользователь выбирает checkbox - есть питомец.
@@ -91,7 +91,7 @@ function sendData(data) {
 
         sendedDataBlock.append(box);
     });
-};
+}
 
 
 /** Вовзвращает массив данных всеx input формы
@@ -148,7 +148,7 @@ function getData() {
     });    
 
     return data;
-};
+}
 
 
 /** Проверяет переданное поле на ошибки и возвращает результат проверки
@@ -171,26 +171,21 @@ function validateField(fieldData) {
     
 
     /** Валидация поля в зависимости от передаваемых параметров     
-     * @param {{required: boolean; type: string}} validation - параметры валидации:
+     * @param {{required?: boolean; type?: string}} validation - параметры валидации:
      * required - проверка на обязательность заполнения
      * type - проверка на тип поля (text - текстовое)
      */
-    function validate(validation = { required: false }) {        
-
-        if (validation.required && fieldData.value === '' ||
-                (validation?.type === 'text' && !(isNaN(Number(fieldData.value)) || fieldData.value === ''))) {          
-            return false;
-        }    
-        
-        return true;
+    function validate(validation = { required: false }) {
+        return !(validation.required && fieldData.value === '' ||
+            (validation?.type === 'text' && !(isNaN(Number(fieldData.value)) || fieldData.value === '')));
     }
 }
 
 
 /** Присваивает передаваемому input класс ошибки или снимает его
- * @param {Element} elem - элемент input
+ * @param {HTMLInputElement} elem - элемент input
  * @param {boolean} isValid - флаг валидности. По умолчанию false,
- * @param {{empty: string; error: string}} errorMessages - пользовательские тексты с ошибками: 
+ * @param {string} errorMessages - пользовательские тексты с ошибками:
  * empty - ошибка не заполненного поля. 
  * error - ошибка типа данных поля.
  */
@@ -244,9 +239,9 @@ function createLabelWithInput(labelText = '', inputName = '') {
 }
 
 /** Конструктор создания label с select для формы
- * @param {string|number[]} optionsValues - значения для option
+ * @param {Array<string|number>} optionsValues - значения для option
  * @param {string} labelText - текст лейбла
- * @param {string} inputName - name элемента input
+ * @param {string} selectName - name элемента input
  */
 function createSelect(optionsValues, labelText = '', selectName = '') {
     const selectBlock = document.createElement('select'),

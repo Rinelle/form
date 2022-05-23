@@ -62,6 +62,10 @@ body {
 
     .label-text {
         margin-bottom: 4px;
+
+        &span {
+            display: none;
+        }
     }
 
     button {
