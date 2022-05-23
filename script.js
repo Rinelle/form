@@ -3,7 +3,8 @@ const form = document.querySelector('.form'),
     errorsList = document.querySelector('.errors-list ul'),
     petInfoBlockSwitcher = document.querySelector('#pet-info-block-switcher'),
     errors = [],
-    sendedDataBlock = document.querySelector('#sendedData');    
+    sendedDataBlock = document.querySelector('#sendedData'),
+    petInfoBlock = document.querySelector('.pet-info');
 
 const ERROR_MESSAGES = {
     firstName: '<b>Имя</b> обязательно для заполнения и должно состоять из текста',
@@ -24,7 +25,6 @@ submitButton.addEventListener('click', submitFormHandler);
 /** Пользователь выбирает checkbox - есть питомец.
  *  Добавляем/убираем блок с формой для данных по питомцу */
 petInfoBlockSwitcher.addEventListener('change', (e) => {
-    const petInfoBlock = document.querySelector('.pet-info');
     petInfoBlock.innerHTML = '';
 
     if (e.target.checked) {
@@ -78,26 +78,10 @@ function submitFormHandler(event) {
     sendData(data);    
 }
 
-
-/** Иммитация отправки данных. Вывод данных в текстовом виде.
-* @param {{name: string; value: string}[]} data - объект события
-*/
-function sendData(data) {
-    sendedDataBlock.innerHTML = '';
-
-    data.forEach(item => {
-        const box = document.createElement('div');
-        box.innerHTML = `<b>${item.name}</b>: ${item.value}`;
-
-        sendedDataBlock.append(box);
-    });
-}
-
-
-/** Вовзвращает массив данных всеx input формы
+/** Вовзвращает массив данных всех input формы
  * @returns { {name: string; value: string; elem: Element}[] }
  */
-function getData() {    
+function getData() {
     const inputs = form.querySelectorAll('input'),
         selects = form.querySelectorAll('select'),
         data = [];
@@ -122,17 +106,7 @@ function getData() {
             name: inputName,
             value: input.value,
             elem: input
-        });           
-         
-        
-        function findInCollection(collection, exp) {
-            for (let i = 0; i < collection.length; i++) {
-                const item = collection[i];
-                if (exp(item)) {
-                    return item;
-                }
-            }
-        }
+        });
     }
 
     selects.forEach(select => {
@@ -145,7 +119,7 @@ function getData() {
                 elem: select
             })
         }
-    });    
+    });
 
     return data;
 }
@@ -176,8 +150,15 @@ function validateField(fieldData) {
      * type - проверка на тип поля (text - текстовое)
      */
     function validate(validation = { required: false }) {
-        return !(validation.required && fieldData.value === '' ||
-            (validation?.type === 'text' && !(isNaN(Number(fieldData.value)) || fieldData.value === '')));
+        if (validation.required && fieldData.value === '') {
+            return false;
+        }
+
+        if (validation?.type === 'text' && !(isNaN(Number(fieldData.value)) || fieldData.value === '')) {
+            return false;
+        }
+
+        return true;
     }
 }
 
@@ -225,7 +206,7 @@ function showErrorList(errors) {
 function createLabelWithInput(labelText = '', inputName = '') {
     const labelBlock = document.createElement('label'),
         input = document.createElement('input'),
-        labelTextBlock = document.createElement('div');
+        labelTextBlock = document.createElement('span');
     
     labelTextBlock.className = 'label-text';
     labelTextBlock.innerText = labelText;
@@ -246,7 +227,7 @@ function createLabelWithInput(labelText = '', inputName = '') {
 function createSelect(optionsValues, labelText = '', selectName = '') {
     const selectBlock = document.createElement('select'),
         labelBlock = document.createElement('label'),
-        labelTextBlock = document.createElement('div'),
+        labelTextBlock = document.createElement('span'),
 
         options = optionsValues.map(value => {
             const option = document.createElement('option');
@@ -267,6 +248,31 @@ function createSelect(optionsValues, labelText = '', selectName = '') {
     return labelBlock;
 }
 
+/**
+ * Возвращает первый подходящий условию элемент из передаваемой коллекции
+ * @param {NodeListOf<HTMLElementTagNameMap[string]>} collection - коллекция input элементов
+ * @param {(HTMLInputElement) => boolean} exp - условие отбора элемента
+ * @returns {HTMLInputElement}
+ */
+function findInCollection(collection, exp) {
+    for (let i = 0; i < collection.length; i++) {
+        const item = collection[i];
+        if (exp(item)) {
+            return item;
+        }
+    }
+}
 
+/** Иммитация отправки данных. Вывод данных в текстовом виде.
+ * @param {{name: string; value: string}[]} data - объект события
+ */
+function sendData(data) {
+    sendedDataBlock.innerHTML = '';
 
+    data.forEach(item => {
+        const box = document.createElement('div');
+        box.innerHTML = `<b>${item.name}</b>: ${item.value}`;
 
+        sendedDataBlock.append(box);
+    });
+}
